@@ -100,3 +100,4 @@ if __name__ == "__main__":
     window = PogodynkaApp()
     window.show()
     sys.exit(app.exec())
+# sprawdzam pustym komentarzem githuba desktop
