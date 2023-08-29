@@ -33,6 +33,8 @@ class PogodynkaApp(QMainWindow):
         self.city_entry.setFont(font)
         self.city_entry.setStyleSheet("color: Black; background-color: White")
         self.city_entry.setMaximumWidth(self.width() // 4)
+        self.city_entry.setPlaceholderText("Twoje miasto")
+        self.city_entry.textChanged.connect(self.city_entry_changed)
         layout.addWidget(self.city_entry)
 
         self.przycisk_gowny = QPushButton("Sprawdź!", self)
@@ -77,9 +79,14 @@ class PogodynkaApp(QMainWindow):
                 if dane_pogody:
                     temperatura = dane_pogody.get("main", {}).get("temp")
                     opis = dane_pogody.get("weather", [{}])[0].get("description")
-                    if temperatura is not None and opis:
-                        QMessageBox.information(self, "Pogoda",
-                                                f"Aktualna temperatura to {temperatura} stopni Celsjusza.\nOpis: {opis}")
+                    nazwa_miasta = dane_pogody.get('name')
+                    if temperatura is not None and opis and nazwa_miasta:
+                        self.city_entry.clear()
+                        message_box = QMessageBox(self)
+                        message_box.setWindowTitle("Pogoda")
+                        message_box.setText(f"<b>Twoje miasto to: {nazwa_miasta}</b>\nAktualna temperatura to {temperatura} stopni Celsjusza.<br>Opis: {opis}")
+                        message_box.setStyleSheet("QLabel#qt_msgbox_label { font-weight: bold; }")
+                        message_box.exec()
                         self.dane_pogody = None
                     else:
                         QMessageBox.critical(self, "Błąd", "Nie znaleziono miasta.")
@@ -93,6 +100,11 @@ class PogodynkaApp(QMainWindow):
                 self.dane_pogody = None
         else:
             QMessageBox.critical(self, "Błąd", "Wprowadź nazwę miasta.")
+    def city_entry_changed(self, text):
+        if text:
+                self.city_entry.setPlaceholderText("")
+        else:
+            self.city_entry.setPlaceholderText("Twoje miasto")
 
 
 if __name__ == "__main__":
