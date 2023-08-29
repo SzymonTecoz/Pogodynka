@@ -41,6 +41,7 @@ class PogodynkaApp(QMainWindow):
         self.przycisk_gowny.setFont(font)
         self.przycisk_gowny.setStyleSheet("background-color: Royalblue; color: white;")
         self.przycisk_gowny.setMaximumWidth(self.width() // 4)
+        self.przycisk_gowny.setCursor(Qt.CursorShape.PointingHandCursor)
         self.przycisk_gowny.clicked.connect(self.sprawdz_pogode)
         layout.addWidget(self.przycisk_gowny)
 
